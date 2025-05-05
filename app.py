@@ -10,34 +10,31 @@ import threading
 # Import our API client to communicate with the backend
 from api_client import api_client
 
-# Check if the backend is running and start it if not
-def ensure_backend_running():
-    import subprocess
-    import socket
-    import time
-    
-    def is_port_in_use(port):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            return s.connect_ex(('localhost', port)) == 0
-    
-    # Check if the backend is already running
-    if not is_port_in_use(5000):
-        # Start the backend in a separate process
-        subprocess.Popen(['python', 'backend.py'], 
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE)
-        
-        # Wait for backend to start
-        max_attempts = 10
-        attempts = 0
-        while not is_port_in_use(5000) and attempts < max_attempts:
-            time.sleep(1)
-            attempts += 1
+# Display a warning if backend is not running
+import socket
+def is_backend_running():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            # Try to connect to the backend
+            s.connect(('localhost', 5000))
+            return True
+        except:
+            return False
 
-# Start backend in a separate thread to avoid blocking the Streamlit UI
-backend_thread = threading.Thread(target=ensure_backend_running)
-backend_thread.daemon = True
-backend_thread.start()
+# Check if backend is running
+backend_status = is_backend_running()
+if not backend_status:
+    st.warning("""
+    ⚠️ Backend server is not running. Please start it by running the following in a separate terminal:
+    
+    ```
+    cd /Users/Ahmed/CascadeProjects/tutor_ai
+    python backend.py
+    ```
+    
+    Then refresh this page.
+    """)
+
 
 # Page config
 st.set_page_config(
