@@ -1,0 +1,16 @@
+{
+  "name": "Kiin Clothline - Bespoke Suits in Nairobi",
+  "short_name": "Kiin Clothline",
+  "description": "Bespoke, made-to-measure suits tailored in Eastleigh, Nairobi. Expert tailoring for weddings, business, and special occasions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "/suits/navy-pinstripe-double-breasted.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    }
+  ]
+}

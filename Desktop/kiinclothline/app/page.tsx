@@ -1,9 +1,34 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import Nav from "@/app/components/Nav";
 import Gallery from "@/app/components/Gallery";
 import BookingForm from "@/app/components/BookingForm";
 import Testimonials from "@/app/components/Testimonials";
 import { site, suits } from "@/app/lib/site";
+
+export const metadata: Metadata = {
+  title: "Bespoke Tailoring & Made-to-Measure Suits in Eastleigh, Nairobi",
+  description: "Discover exceptional bespoke tailoring at Kiin Clothline in Eastleigh, Nairobi. We create custom-made suits for weddings, business, and special occasions. Book your fitting today.",
+  keywords: ["bespoke suits Nairobi", "custom suits Eastleigh", "made to measure Kenya", "wedding suits Nairobi", "business suits", "formal wear Nairobi", "tailor Eastleigh", "custom fitted suits", "Nairobi tailoring services"],
+  openGraph: {
+    title: "Bespoke Tailoring & Made-to-Measure Suits in Eastleigh, Nairobi",
+    description: "Discover exceptional bespoke tailoring at Kiin Clothline in Eastleigh, Nairobi. We create custom-made suits for weddings, business, and special occasions.",
+    url: "https://kiinclothline.com",
+    images: [
+      {
+        url: "/suits/navy-pinstripe-double-breasted.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Kiin Clothline bespoke navy pinstripe suit"
+      }
+    ]
+  },
+  twitter: {
+    title: "Bespoke Tailoring & Made-to-Measure Suits in Eastleigh, Nairobi",
+    description: "Discover exceptional bespoke tailoring at Kiin Clothline in Eastleigh, Nairobi. We create custom-made suits for weddings, business, and special occasions.",
+    images: ["/suits/navy-pinstripe-double-breasted.jpg"]
+  }
+};
 
 const services = [
   { title: "Bespoke Fit", text: "Made around your measurements, posture and the way you move." },
