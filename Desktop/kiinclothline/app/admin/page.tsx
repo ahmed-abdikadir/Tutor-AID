@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { MEASUREMENTS, type Booking } from "@/app/lib/booking";
+import { MEASUREMENT_LABELS, MEASUREMENTS, type Booking } from "@/app/lib/booking";
 
 export default function AdminPage() {
   const [rows, setRows] = useState<Booking[] | null>(null);
@@ -34,7 +34,7 @@ export default function AdminPage() {
             <p>{rows.length} booking(s)</p>
             <table>
               <thead>
-                <tr><th>Received</th><th>Name</th><th>Phone</th><th>Email</th><th>Suit</th><th>Occasion</th><th>Date / Time</th><th>Measurements (cm)</th><th>Notes</th></tr>
+                <tr><th>Received</th><th>Name</th><th>Phone</th><th>Email</th><th>Suit</th><th>Occasion</th><th>Date / Time</th><th>Measurements (inches)</th><th>Notes</th></tr>
               </thead>
               <tbody>
                 {rows.map((b) => (
@@ -46,7 +46,7 @@ export default function AdminPage() {
                     <td>{b.suitType}</td>
                     <td>{b.occasion || "—"}</td>
                     <td>{b.date} {b.time}</td>
-                    <td>{MEASUREMENTS.filter((m) => b[m]).map((m) => `${m}: ${b[m]}`).join(", ") || "—"}</td>
+                    <td>{MEASUREMENTS.filter((m) => b[m]).map((m) => `${MEASUREMENT_LABELS[m]}: ${b[m]}`).join(", ") || "—"}</td>
                     <td>{b.notes || "—"}</td>
                   </tr>
                 ))}

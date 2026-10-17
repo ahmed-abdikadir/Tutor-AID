@@ -1,5 +1,5 @@
 import mysql, { type RowDataPacket } from "mysql2/promise";
-import { normalizeKenyanPhone } from "@/app/lib/booking";
+import { MEASUREMENTS, normalizeKenyanPhone } from "@/app/lib/booking";
 
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST ?? "127.0.0.1",
@@ -15,6 +15,7 @@ const pool = mysql.createPool({
 let schemaReady: Promise<void> | undefined;
 
 async function createTables() {
+  const measurementColumns = MEASUREMENTS.map((field) => `    ${field} VARCHAR(32) NOT NULL DEFAULT ''`).join(",\n");
   await pool.execute(`CREATE TABLE IF NOT EXISTS bookings (
     id CHAR(36) PRIMARY KEY,
     name VARCHAR(1000) NOT NULL,
@@ -25,17 +26,24 @@ async function createTables() {
     time VARCHAR(1000) NOT NULL,
     email VARCHAR(1000) NOT NULL DEFAULT '',
     occasion VARCHAR(1000) NOT NULL DEFAULT '',
-    chest VARCHAR(1000) NOT NULL DEFAULT '',
-    waist VARCHAR(1000) NOT NULL DEFAULT '',
-    shoulder VARCHAR(1000) NOT NULL DEFAULT '',
-    sleeve VARCHAR(1000) NOT NULL DEFAULT '',
-    inseam VARCHAR(1000) NOT NULL DEFAULT '',
-    height VARCHAR(1000) NOT NULL DEFAULT '',
+${measurementColumns},
     notes TEXT NOT NULL,
     created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     INDEX bookings_created_at_idx (created_at),
     UNIQUE KEY bookings_phone_normalized_unique (phone_normalized)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+
+  const legacyMeasurementFields = ["chest", "waist", "shoulder", "sleeve", "inseam", "height"];
+  for (const field of [...new Set([...legacyMeasurementFields, ...MEASUREMENTS])]) {
+    const [column] = await pool.query<RowDataPacket[]>(`SHOW COLUMNS FROM bookings LIKE '${field}'`);
+    if (column.length === 0) {
+      if (MEASUREMENTS.includes(field)) {
+        await pool.execute(`ALTER TABLE bookings ADD COLUMN ${field} VARCHAR(32) NOT NULL DEFAULT ''`);
+      }
+    } else {
+      await pool.execute(`ALTER TABLE bookings MODIFY COLUMN ${field} VARCHAR(32) NOT NULL DEFAULT ''`);
+    }
+  }
 
   const [phoneColumn] = await pool.query<RowDataPacket[]>("SHOW COLUMNS FROM bookings LIKE 'phone_normalized'");
   if (phoneColumn.length === 0) {

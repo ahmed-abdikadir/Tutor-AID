@@ -4,6 +4,7 @@ import Nav from "@/app/components/Nav";
 import Gallery from "@/app/components/Gallery";
 import BookingForm from "@/app/components/BookingForm";
 import Testimonials from "@/app/components/Testimonials";
+import GoogleReviews from "@/app/components/GoogleReviews";
 import { site, suits } from "@/app/lib/site";
 
 export const metadata: Metadata = {
@@ -114,6 +115,7 @@ export default function Home() {
               <h2>Stories in every stitch.</h2>
               <p>Notes from the people who wear Kiin.</p>
             </div>
+            <GoogleReviews placeId={site.googlePlaceId} apiKey={site.googleApiKey} />
             <Testimonials />
           </div>
         </section>

@@ -9,6 +9,8 @@ export const site = {
   tiktok: "https://www.tiktok.com/@axmedkin",
   tiktokHandle: "@axmedkin",
   mapEmbed: "https://www.google.com/maps?q=Kiin+Clothline,+Tenth+St,+Nairobi&ftid=0x182f179d8dbabcd3:0xa7fced443ed8893&output=embed",
+  googlePlaceId: process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID || "",
+  googleApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY || "",
 };
 
 export type Suit = {

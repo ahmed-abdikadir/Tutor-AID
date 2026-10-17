@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { MEASUREMENTS, SUIT_TYPES, TIMES, validateBooking } from "@/app/lib/booking";
+import { MEASUREMENT_GROUPS, MEASUREMENT_LABELS, MEASUREMENTS, SUIT_TYPES, TIMES, validateBooking } from "@/app/lib/booking";
 import { site } from "@/app/lib/site";
 
 type Status = { kind: "idle" | "sending" | "ok" | "err"; message?: string; whatsapp?: string };
 
 function whatsappLink(d: Record<string, string>) {
-  const measurements = MEASUREMENTS.filter((m) => d[m]).map((m) => `${m} ${d[m]}cm`).join(", ");
+  const measurements = MEASUREMENTS.filter((m) => d[m]).map((m) => `${MEASUREMENT_LABELS[m]} ${d[m]}in`).join(", ");
   const lines = [
     "Hello Kiin Clothline, I would like to book a fitting.",
     `Name: ${d.name}`,
@@ -145,12 +145,17 @@ export default function BookingForm() {
       <details className="measurements">
         <summary>Add measurements <span>(optional)</span></summary>
         <fieldset>
-          <legend>Measurements in cm</legend>
-          <div className="form__row form__row--3">
-            {MEASUREMENTS.map((m) => (
-              <label key={m} className="capitalize">{m}<input name={m} type="number" min="0" step="0.5" /></label>
-            ))}
-          </div>
+          <legend>Measurements in inches</legend>
+          {MEASUREMENT_GROUPS.map((group) => (
+            <fieldset key={group.name}>
+              <legend>{group.name}</legend>
+              <div className="form__row form__row--3">
+                {group.fields.map((field) => (
+                  <label key={field.name}>{field.label}<input name={field.name} type="number" min="0" step="0.5" /></label>
+                ))}
+              </div>
+            </fieldset>
+          ))}
         </fieldset>
       </details>
 
